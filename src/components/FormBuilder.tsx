@@ -8,13 +8,14 @@ import PreviewForm from "./PreviewForm";
 import FieldLibrary from "./FieldLibrary";
 import FieldList from "./FieldList";
 import { ModeToggle } from "./themes/mode-toggle";
+import { z } from "zod";
 
 const FormBuilder: FC = () => {
   const fields = useFormStore((state) => state.fields);
   const [previewMode, setPreviewMode] = useState(false);
 
   const schema = useMemo(() => {
-    return fields.reduce((acc, field) => {
+    return fields.reduce<Record<string, z.ZodType<any>>>((acc, field) => {
       if (field.validation) {
         acc[field.id] = field.validation;
       }
